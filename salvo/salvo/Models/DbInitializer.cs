@@ -9,7 +9,7 @@ namespace salvo.Models
     {
         public static void Initialize(SalvoContext context)
         {
-            // Si hay "Players" es que la base ya fue inicializada.
+            // Si no hay "Players" inserto nuevos registros para la tabla "Players"
             if (!context.Players.Any())
             {
                 /*
@@ -30,6 +30,39 @@ namespace salvo.Models
                 foreach (Player player in players)
                 {
                     context.Players.Add(player);
+                }
+                context.SaveChanges();
+            }
+
+            if (!context.Games.Any())
+            {
+                /*
+                1 j.bauer c.obrian Player 1
+                2 j.bauer c.obrian Tie
+                3 c.obrian t.almeida Player 1
+                4 c.obrian j.bauer Tie
+                5 t.almeida j.bauer N/A
+                6 kim_bauer N/A N/A
+                7 t.almeida N/A N/A
+                8 kim_bauer t.almeida N/A
+                 */
+                DateTime now = DateTime.Now;
+
+                var games = new Game[]
+                {
+                    new Game{CreationTime = now},
+                    new Game{CreationTime = now.AddHours(1)},
+                    new Game{CreationTime = now.AddHours(2)},
+                    new Game{CreationTime = now.AddHours(3)},
+                    new Game{CreationTime = now.AddHours(4)},
+                    new Game{CreationTime = now.AddHours(5)},
+                    new Game{CreationTime = now.AddHours(6)},
+                    new Game{CreationTime = now.AddHours(7)}
+                };
+
+                foreach (Game game in games)
+                {
+                    context.Games.Add(game);
                 }
                 context.SaveChanges();
             }

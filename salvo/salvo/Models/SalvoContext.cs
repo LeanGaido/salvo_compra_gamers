@@ -12,6 +12,7 @@ namespace salvo.Models
         {
         }
 
+        public DbSet<Game> Games { get; set; }
         public DbSet<Player> Players { get; set; }
     }
 }
