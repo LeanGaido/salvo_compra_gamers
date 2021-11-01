@@ -16,7 +16,7 @@ namespace salvo.Repositories
         public IEnumerable<Game> GetAllGames()
         {
             return FindAll()
-                .OrderBy(ow => ow.CreationTime)
+                .OrderBy(ow => ow.CreationDate)
                 .ToList();
         }
     }

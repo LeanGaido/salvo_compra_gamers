@@ -50,14 +50,14 @@ namespace salvo.Models
 
                 var games = new Game[]
                 {
-                    new Game{CreationTime = now},
-                    new Game{CreationTime = now.AddHours(1)},
-                    new Game{CreationTime = now.AddHours(2)},
-                    new Game{CreationTime = now.AddHours(3)},
-                    new Game{CreationTime = now.AddHours(4)},
-                    new Game{CreationTime = now.AddHours(5)},
-                    new Game{CreationTime = now.AddHours(6)},
-                    new Game{CreationTime = now.AddHours(7)}
+                    new Game{CreationDate = now},
+                    new Game{CreationDate = now.AddHours(1)},
+                    new Game{CreationDate = now.AddHours(2)},
+                    new Game{CreationDate = now.AddHours(3)},
+                    new Game{CreationDate = now.AddHours(4)},
+                    new Game{CreationDate = now.AddHours(5)},
+                    new Game{CreationDate = now.AddHours(6)},
+                    new Game{CreationDate = now.AddHours(7)}
                 };
 
                 foreach (Game game in games)
