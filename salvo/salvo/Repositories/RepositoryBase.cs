@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using salvo.Models;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,16 @@ namespace salvo.Repositories
         public IQueryable<T> FindAll()
         {
             return this.RepositoryContext.Set<T>().AsNoTracking();
+        }
+        public IQueryable<T> FindAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        {
+            IQueryable<T> queryable = this.RepositoryContext.Set<T>();
+            if (includes != null)
+            {
+                queryable = includes(queryable);
+            }
+
+            return queryable.AsNoTracking();
         }
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {

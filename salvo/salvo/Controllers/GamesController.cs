@@ -22,7 +22,7 @@ namespace salvo.Controllers
 
         // GET: api/<GamesController>
         [HttpGet]
-        public IActionResult GetAllOwners()
+        public IActionResult GetAllGames()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace salvo.Controllers
             }
             catch (Exception ex)
             {
-                //_logger.LogError($"Something went wrong inside GetAllOwners action: {ex.Message}");
+                //_logger.LogError($"Something went wrong inside GetAllGames action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
