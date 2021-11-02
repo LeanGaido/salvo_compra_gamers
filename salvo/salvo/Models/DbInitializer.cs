@@ -34,38 +34,38 @@ namespace salvo.Models
                 context.SaveChanges();
             }
 
-            if (!context.Games.Any())
-            {
-                /*
-                1 j.bauer c.obrian Player 1
-                2 j.bauer c.obrian Tie
-                3 c.obrian t.almeida Player 1
-                4 c.obrian j.bauer Tie
-                5 t.almeida j.bauer N/A
-                6 kim_bauer N/A N/A
-                7 t.almeida N/A N/A
-                8 kim_bauer t.almeida N/A
-                 */
-                DateTime now = DateTime.Now;
+            //if (!context.Games.Any())
+            //{
+            //    /*
+            //    1 j.bauer c.obrian Player 1
+            //    2 j.bauer c.obrian Tie
+            //    3 c.obrian t.almeida Player 1
+            //    4 c.obrian j.bauer Tie
+            //    5 t.almeida j.bauer N/A
+            //    6 kim_bauer N/A N/A
+            //    7 t.almeida N/A N/A
+            //    8 kim_bauer t.almeida N/A
+            //     */
+            //    DateTime now = DateTime.Now;
 
-                var games = new Game[]
-                {
-                    new Game{CreationDate = now},
-                    new Game{CreationDate = now.AddHours(1)},
-                    new Game{CreationDate = now.AddHours(2)},
-                    new Game{CreationDate = now.AddHours(3)},
-                    new Game{CreationDate = now.AddHours(4)},
-                    new Game{CreationDate = now.AddHours(5)},
-                    new Game{CreationDate = now.AddHours(6)},
-                    new Game{CreationDate = now.AddHours(7)}
-                };
+            //    var games = new Game[]
+            //    {
+            //        new Game{CreationDate = now},
+            //        new Game{CreationDate = now.AddHours(1)},
+            //        new Game{CreationDate = now.AddHours(2)},
+            //        new Game{CreationDate = now.AddHours(3)},
+            //        new Game{CreationDate = now.AddHours(4)},
+            //        new Game{CreationDate = now.AddHours(5)},
+            //        new Game{CreationDate = now.AddHours(6)},
+            //        new Game{CreationDate = now.AddHours(7)}
+            //    };
 
-                foreach (Game game in games)
-                {
-                    context.Games.Add(game);
-                }
-                context.SaveChanges();
-            }
+            //    foreach (Game game in games)
+            //    {
+            //        context.Games.Add(game);
+            //    }
+            //    context.SaveChanges();
+            //}
         }
     }
 }

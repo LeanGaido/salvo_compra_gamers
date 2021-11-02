@@ -10,5 +10,7 @@ namespace salvo.Models
         public long Id { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        //public ICollection<GamePlayer> GamePlayers { get; set; }
     }
 }

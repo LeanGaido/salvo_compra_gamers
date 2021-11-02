@@ -11,9 +11,9 @@ namespace salvo.Migrations
                 name: "Games",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
