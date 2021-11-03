@@ -9,7 +9,7 @@ using salvo.Models;
 namespace salvo.Migrations
 {
     [DbContext(typeof(SalvoContext))]
-    [Migration("20211102205639_InitialCreate")]
+    [Migration("20211102215138_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -10,7 +10,7 @@ using salvo.Models;
 namespace salvo.Migrations
 {
     [DbContext(typeof(SalvoContext))]
-    [Migration("20211102205707_addGameEntity")]
+    [Migration("20211102215158_addGameEntity")]
     partial class addGameEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

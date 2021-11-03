@@ -23,6 +23,7 @@ namespace salvo.Repositories
         public IQueryable<T> FindAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             IQueryable<T> queryable = this.RepositoryContext.Set<T>();
+
             if (includes != null)
             {
                 queryable = includes(queryable);
