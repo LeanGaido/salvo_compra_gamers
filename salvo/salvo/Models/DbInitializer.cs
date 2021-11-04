@@ -154,7 +154,17 @@ namespace salvo.Models
                         JoinDate=DateTime.Now,
                         Game = game8,
                         Player = almeida
-                    },
+                    }
+                    //new GamePlayer {
+                    //    JoinDate=DateTime.Now,
+                    //    GameId = 1,
+                    //    PlayerId = 1
+                    //},
+                    //new GamePlayer {
+                    //    JoinDate=DateTime.Now,
+                    //    GameId = 1,
+                    //    PlayerId = 2
+                    //}
                 };
 
                 foreach (GamePlayer gp in gamesPlayers)

@@ -30,10 +30,7 @@ namespace salvo.Controllers
                 //Antes
                 //var games = _repository.GetAllGames();
                 //Ahora
-                var games = _repository.GetAllGamesWithPlayers();
-                //_logger.LogInfo($"Returned all owners from database.");
-
-                var gamesDto = games.Select(
+                var gamesDto = _repository.GetAllGamesWithPlayers().Select(
                     game => new GameDTO
                     {
                         Id = game.Id,
@@ -46,11 +43,13 @@ namespace salvo.Controllers
                                                Player = new PlayerDTO
                                                {
                                                    Id = gamePlayer.Player.Id,
-                                                   Name = gamePlayer.Player.Name
+                                                   Name = gamePlayer.Player.Name,
+                                                   Email = gamePlayer.Player.Email
                                                }
                                            }).ToList()
                     }).ToList();
 
+                //_logger.LogInfo($"Returned all owners from database.");
                 return Ok(gamesDto);
             }
             catch (Exception ex)
