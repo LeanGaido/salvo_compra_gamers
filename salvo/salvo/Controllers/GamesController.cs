@@ -22,7 +22,7 @@ namespace salvo.Controllers
         }
 
         // GET: api/<GamesController>
-        [HttpGet]
+        [HttpGet("{id}", Name = "Get")]
         public IActionResult GetAllGames()
         {
             try
