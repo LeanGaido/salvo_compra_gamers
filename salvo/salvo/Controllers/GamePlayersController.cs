@@ -42,8 +42,8 @@ namespace salvo.Controllers
                             Location = location.Location
                         }).ToList()
                     }).ToList(),
-                    GamePlayers = gamePlayers.Game.GamePlayers.Select(gamePlayer => new GamePlayerDTO 
-                    { 
+                    GamePlayers = gamePlayers.Game.GamePlayers.Select(gamePlayer => new GamePlayerDTO
+                    {
                         Id = gamePlayer.Id,
                         JoinDate = gamePlayer.JoinDate,
                         Player = new PlayerDTO
@@ -52,7 +52,23 @@ namespace salvo.Controllers
                             Name = gamePlayer.Player.Name,
                             Email = gamePlayer.Player.Email
                         }
-                    }).ToList()
+                    }).ToList(),
+                    Salvos = gamePlayers.Game.GamePlayers.SelectMany(gps => gps.Salvos.Select(salvo => new SalvoDTO
+                    {
+                        Id = salvo.Id,
+                        Turn = salvo.Turn,
+                        Player = new PlayerDTO
+                        {
+                            Id = salvo.GamePlayer.Player.Id,
+                            Email = salvo.GamePlayer.Player.Email,
+                            Name = salvo.GamePlayer.Player.Name
+                        },
+                        Locations = salvo.Locations.Select(location => new SalvoLocationDTO
+                        {
+                            Id = location.Id,
+                            Location = location.Location
+                        }).ToList()
+                    })).ToList()
                 };
                
                 //_logger.LogInfo($"Returned all owners from database.");
