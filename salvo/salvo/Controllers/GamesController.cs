@@ -22,7 +22,7 @@ namespace salvo.Controllers
         }
 
         // GET: api/<GamesController>
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet(Name = "GetAllGames")]
         public IActionResult GetAllGames()
         {
             try
@@ -45,7 +45,8 @@ namespace salvo.Controllers
                                                    Id = gamePlayer.Player.Id,
                                                    Name = gamePlayer.Player.Name,
                                                    Email = gamePlayer.Player.Email
-                                               }
+                                               },
+                                               Point = gamePlayer.GetScore() != null ? gamePlayer.GetScore().Point : null
                                            }).ToList()
                     }).ToList();
 
@@ -57,31 +58,6 @@ namespace salvo.Controllers
                 //_logger.LogError($"Something went wrong inside GetAllGames action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
-        }
-
-        // GET api/<GamesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<GamesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<GamesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<GamesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
