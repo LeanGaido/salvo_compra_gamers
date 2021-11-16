@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using salvo.Models;
 using salvo.Repositories;
 using System;
@@ -12,6 +13,7 @@ namespace salvo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("PlayerOnly")]
     public class GamePlayersController : ControllerBase
     {
         private IGamePlayerRepository _repository;

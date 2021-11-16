@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +34,19 @@ namespace salvo
 
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IGamePlayerRepository, GamePlayerRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                    {
+                        options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                        options.LoginPath = new PathString("/index.html");
+                    });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("PlayerOnly", policy => policy.RequireClaim("Player"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +64,8 @@ namespace salvo
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

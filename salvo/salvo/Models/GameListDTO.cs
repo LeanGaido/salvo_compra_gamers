@@ -5,14 +5,10 @@ using System.Threading.Tasks;
 
 namespace salvo.Models
 {
-    public class PlayerDTO
+    public class GameListDTO
     {
-        public long Id { get; set; }
-
-        public string Name { get; set; }
-
         public string Email { get; set; }
 
-        public string Password { get; set; }
+        public ICollection<GameDTO> Games { get; set; }
     }
 }
