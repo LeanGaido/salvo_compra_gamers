@@ -11,5 +11,6 @@ namespace salvo.Repositories
     public interface IPlayerRepository : IRepositoryBase<Player>
     {
         Player FindByEmail(string email);
+        void Save(Player player);
     }
 }
