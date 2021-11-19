@@ -9,5 +9,6 @@ namespace salvo.Repositories
     public interface IGamePlayerRepository : IRepositoryBase<GamePlayer>
     {
         public GamePlayer GetGamePlayerView(long idGamePlayer);
+        void Save(GamePlayer gamePlayer);
     }
 }

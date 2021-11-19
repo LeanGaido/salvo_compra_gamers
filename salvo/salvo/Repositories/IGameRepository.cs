@@ -11,5 +11,7 @@ namespace salvo.Repositories
         IEnumerable<Game> GetAllGames();
 
         IEnumerable<Game> GetAllGamesWithPlayers();
+
+        Game FindById(long id);
     }
 }

@@ -29,7 +29,13 @@ namespace salvo.Controllers
         {
             try
             {
+                string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
+
                 var gamePlayers = _repository.GetGamePlayerView(id);
+
+                if (gamePlayers.Player.Email != email)
+                    return Forbid();
+
                 var gameView = new GameViewDTO
                 {
                     Id = gamePlayers.Id,
