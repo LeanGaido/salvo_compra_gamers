@@ -120,8 +120,9 @@ namespace salvo.Controllers
             var hasNumber = new Regex(@"[0-9]+");
             var hasUpperChar = new Regex(@"[A-Z]+");
             var hasMinimum8Chars = new Regex(@".{8,}");
+            var hasSpecialChar = new Regex("[^a-zA-Z0-9]");
 
-            return hasNumber.IsMatch(Password) && hasUpperChar.IsMatch(Password) && hasMinimum8Chars.IsMatch(Password);
+            return hasNumber.IsMatch(Password) && hasUpperChar.IsMatch(Password) && hasMinimum8Chars.IsMatch(Password) && hasSpecialChar.IsMatch(Password);
         }
     }
 }

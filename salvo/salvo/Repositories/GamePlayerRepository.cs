@@ -38,8 +38,21 @@ namespace salvo.Repositories
 
         public void Save(GamePlayer gamePlayer)
         {
-            Create(gamePlayer);
+            //Create(gamePlayer);
+            //SaveChanges();
+            if (gamePlayer.Id == 0)
+                Create(gamePlayer);
+            else
+                Update(gamePlayer);
             SaveChanges();
+        }
+
+        public GamePlayer FindById(long id)
+        {
+            return FindByCondition(gamePlayer => gamePlayer.Id == id)
+                    .Include(gamePlayer => gamePlayer.Player)
+                    .Include(gamePlayer => gamePlayer.Ships)
+                    .FirstOrDefault();
         }
     }
 }

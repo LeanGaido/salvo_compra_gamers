@@ -88,5 +88,45 @@ namespace salvo.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpPost("{id}/ships", Name = "ships")]
+        public IActionResult Post(long id, [FromBody] ICollection<ShipDTO> ships)
+        {
+            try
+            {
+                string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
+
+                var gamePlayer = _repository.FindById(id);
+
+                if (gamePlayer == null)
+                    return StatusCode(403, "Game doesnt Exist");
+                if(gamePlayer.Player.Email != email)
+                    return StatusCode(403, "The User is not part of this game");
+                if(gamePlayer.Ships.Count == 5)
+                    return StatusCode(403, "The Ships are already positioned");
+                if((gamePlayer.Ships.Count + ships.Count) > 5)
+                    return StatusCode(403, "The Player cannot have more than 5 ships in the same game");
+
+                foreach (ShipDTO shipDTO in ships)
+                {
+                    gamePlayer.Ships.Add(new Ship { 
+                        GamePlayerId = id,
+                        Locations = shipDTO.Locations.Select(location => new ShipLocation
+                        {
+                            Location = location.Location
+                        }).ToList(),
+                        Type = shipDTO.Type
+                    });
+                }
+
+                _repository.Save(gamePlayer);
+
+                return StatusCode(201,"Created");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error");
+            }
+        }
     }
 }
