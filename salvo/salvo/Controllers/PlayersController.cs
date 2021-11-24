@@ -26,7 +26,7 @@ namespace salvo.Controllers
         public IActionResult Post([FromBody] PlayerDTO playerDTO)
         {
             bool CamposInvalidos = false;
-            string MensajeError = "";
+            string MensajeError = "", mensajeErrorPassword = "";
 
             #region Validaciones
             if (string.IsNullOrEmpty(playerDTO.Name))
@@ -54,10 +54,10 @@ namespace salvo.Controllers
                 CamposInvalidos = true;
                 MensajeError = (string.IsNullOrEmpty(MensajeError)) ? "The Password cannot be Empty" : MensajeError + " - The Password cannot be Empty";
             }
-            if (!IsValidPassword(playerDTO.Password))
+            if (!IsValidPassword(playerDTO.Password, out mensajeErrorPassword))
             {
                 CamposInvalidos = true;
-                MensajeError = (string.IsNullOrEmpty(MensajeError)) ? "The Password is not valid" : MensajeError + " - The Password is not valid";
+                MensajeError = (string.IsNullOrEmpty(MensajeError)) ? mensajeErrorPassword : MensajeError + " - " + mensajeErrorPassword;
             }
             #endregion
 
@@ -115,7 +115,7 @@ namespace salvo.Controllers
 
             return hasValidFormat && hasBetween10And30Chars.IsMatch(Email);
         }
-        public bool ValidatePassword(string password, out string ErrorMessage)
+        public bool IsValidPassword(string password, out string ErrorMessage)
         {
             var minLength = 8;
             var numUpper = 1;
