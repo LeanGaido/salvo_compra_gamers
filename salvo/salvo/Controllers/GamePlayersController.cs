@@ -107,17 +107,29 @@ namespace salvo.Controllers
                 if((gamePlayer.Ships.Count + ships.Count) > 5)
                     return StatusCode(403, "The Player cannot have more than 5 ships in the same game");
 
-                foreach (ShipDTO shipDTO in ships)
+                gamePlayer.Ships = ships.Select(ship => new Ship
                 {
-                    gamePlayer.Ships.Add(new Ship { 
-                        GamePlayerId = id,
-                        Locations = shipDTO.Locations.Select(location => new ShipLocation
-                        {
-                            Location = location.Location
-                        }).ToList(),
-                        Type = shipDTO.Type
-                    });
-                }
+                    GamePlayerId = id,
+                    Locations = ship.Locations.Select(location => new ShipLocation
+                    {
+                        Id = ship.Id,
+                        Location = location.Location
+                    }).ToList(),
+                    Type = ship.Type
+                }).ToList();
+
+                //foreach (ShipDTO shipDTO in ships)
+                //{
+                //    gamePlayer.Ships.Add(new Ship
+                //    {
+                //        GamePlayerId = id,
+                //        Locations = shipDTO.Locations.Select(location => new ShipLocation
+                //        {
+                //            Location = location.Location
+                //        }).ToList(),
+                //        Type = shipDTO.Type
+                //    });
+                //}
 
                 _repository.Save(gamePlayer);
 
