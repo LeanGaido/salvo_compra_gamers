@@ -32,6 +32,12 @@ namespace salvo.Controllers
                 string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
 
                 var gamePlayers = _repository.GetGamePlayerView(id);
+                var Hits = gamePlayers.GetHits();
+                var Sunks = gamePlayers.GetSunks();
+
+                var Opponent = gamePlayers.GetOponent();
+                var HitsOpponent = Opponent?.GetHits();
+                var SunksOpponent = Opponent?.GetSunks();
 
                 if (gamePlayers.Player.Email != email)
                     return Forbid();
@@ -76,7 +82,11 @@ namespace salvo.Controllers
                             Id = location.Id,
                             Location = location.Location
                         }).ToList()
-                    })).ToList()
+                    })).ToList(),
+                    Hits = Hits,
+                    HitsOpponent = HitsOpponent,
+                    Sunks = Sunks,
+                    SunksOpponent = SunksOpponent
                 };
                
                 //_logger.LogInfo($"Returned all owners from database.");
@@ -134,6 +144,59 @@ namespace salvo.Controllers
                 _repository.Save(gamePlayer);
 
                 return StatusCode(201,"Created");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error");
+            }
+        }
+
+        [HttpPost("{id}/salvos", Name = "salvos")]
+        public IActionResult Post(long id, [FromBody] SalvoDTO salvos)
+        {
+            try
+            {
+                string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
+
+                GamePlayer gamePlayer = _repository.FindById(id);
+
+                GamePlayer opponent = gamePlayer.GetOponent();
+                //opponent = _repository.FindById(opponent.Id);
+
+                if (gamePlayer == null)
+                    return StatusCode(403, "Game doesnt Exist");
+                if (gamePlayer.Player.Email != email)
+                    return StatusCode(403, "The User is not part of this game");
+                if (gamePlayer.Ships.Count != 5)
+                    return StatusCode(403, "The Ships arent positioned");
+                if (opponent == null)
+                    return StatusCode(403, "The game doesnt have an opponent");
+                if (opponent.Ships.Count != 5)
+                    return StatusCode(403, "The Opponent Ships arent positioned");
+                if (gamePlayer.Salvos.Count > opponent.Salvos.Count)
+                    return StatusCode(403, "This is not your turn");
+                if((gamePlayer.Salvos.Count == opponent.Salvos.Count) && gamePlayer.JoinDate > opponent.JoinDate)
+                    return StatusCode(403, "This is not your turn");
+                //if(salvos.Locations.Count != 1)
+                //    return StatusCode(403, "Only one Shot Per turn");
+
+                List<List<string>> ShipsLocations = opponent.Ships.Select(
+                                                        ship => ship.Locations.Select(
+                                                            shipLocation => shipLocation.Location
+                                                        ).ToList()
+                                                    ).ToList();
+
+                gamePlayer.Salvos.Add(new Salvo {
+                    GamePlayerId = id,
+                    Turn = gamePlayer.Salvos.Count + 1,
+                    Locations = salvos.Locations.Select(location => new SalvoLocation { 
+                        Location = location.Location
+                    }).ToList()
+                });
+
+                _repository.Save(gamePlayer);
+
+                return StatusCode(201, "Created");
             }
             catch (Exception ex)
             {

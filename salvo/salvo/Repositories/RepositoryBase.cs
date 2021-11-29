@@ -34,7 +34,7 @@ namespace salvo.Repositories
         }
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
-            return this.RepositoryContext.Set<T>().Where(expression).AsNoTracking();
+            return this.RepositoryContext.Set<T>().Where(expression).AsNoTrackingWithIdentityResolution();
         }
         public void Create(T entity)
         {
