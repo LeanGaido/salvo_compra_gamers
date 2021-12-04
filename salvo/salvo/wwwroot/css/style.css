@@ -80,12 +80,12 @@
 }
 
 .salvo-table th{
-    background-color: rgb(213, 213, 213);
+    background-color: rgb(5 13 78);
     text-align: center;
 }
 
 .salvo-table .td-info {
-    background-color: rgb(213, 213, 213);
+    background-color: rgb(5 13 78);
     text-align: center;
 }
 
@@ -131,7 +131,10 @@
     color: red;
 }
 
-.shipsStatus{
-    background-color: #3b7ad3;
+.shipsStatus {
+    background-color: #3b66d336;
     max-width: 450px;
+    border-radius: 50px;
+    text-align: center;
+    padding: 10px 5px;
 }

@@ -11,16 +11,26 @@ using System.Threading.Tasks;
 
 namespace salvo.Controllers
 {
+    public enum Resultado
+    {
+        NOT_FINISHED,
+        PLAYER_WON,
+        PLAYER_LOSS,
+        GAME_TIE
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     [Authorize("PlayerOnly")]
     public class GamePlayersController : ControllerBase
     {
         private IGamePlayerRepository _repository;
+        private IScoreRepository _scoreRepository;
 
-        public GamePlayersController(IGamePlayerRepository repository)
+        public GamePlayersController(IGamePlayerRepository repository, IScoreRepository scoreRepository)
         {
             _repository = repository;
+            _scoreRepository = scoreRepository;
         }
 
         // GET: api/<GamePlayersController>
@@ -32,12 +42,7 @@ namespace salvo.Controllers
                 string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
 
                 var gamePlayers = _repository.GetGamePlayerView(id);
-                var Hits = gamePlayers.GetHits();
-                var Sunks = gamePlayers.GetSunks();
-
                 var Opponent = gamePlayers.GetOponent();
-                var HitsOpponent = Opponent?.GetHits();
-                var SunksOpponent = Opponent?.GetSunks();
 
                 if (gamePlayers.Player.Email != email)
                     return Forbid();
@@ -83,10 +88,11 @@ namespace salvo.Controllers
                             Location = location.Location
                         }).ToList()
                     })).ToList(),
-                    Hits = Hits,
-                    HitsOpponent = HitsOpponent,
-                    Sunks = Sunks,
-                    SunksOpponent = SunksOpponent
+                    Hits = gamePlayers.GetHits(),
+                    HitsOpponent = Opponent?.GetHits(),
+                    Sunks = gamePlayers.GetSunks(),
+                    SunksOpponent = Opponent?.GetSunks(),
+                    GameState = gamePlayers.GetGameState().ToString()
                 };
                
                 //_logger.LogInfo($"Returned all owners from database.");
@@ -159,8 +165,11 @@ namespace salvo.Controllers
                 string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
 
                 GamePlayer gamePlayer = _repository.FindById(id);
-
                 GamePlayer opponent = gamePlayer.GetOponent();
+
+                Resultado Resultado = Resultado.NOT_FINISHED;
+                bool GameEnded = false;
+
                 //opponent = _repository.FindById(opponent.Id);
 
                 if (gamePlayer == null)
@@ -177,14 +186,18 @@ namespace salvo.Controllers
                     return StatusCode(403, "This is not your turn");
                 if((gamePlayer.Salvos.Count == opponent.Salvos.Count) && gamePlayer.JoinDate > opponent.JoinDate)
                     return StatusCode(403, "This is not your turn");
-                //if(salvos.Locations.Count != 1)
-                //    return StatusCode(403, "Only one Shot Per turn");
+                if (salvos.Locations.Count != 5)
+                    return StatusCode(403, "Only 5 salvos per turn, no more, no less");
 
-                List<List<string>> ShipsLocations = opponent.Ships.Select(
-                                                        ship => ship.Locations.Select(
-                                                            shipLocation => shipLocation.Location
-                                                        ).ToList()
-                                                    ).ToList();
+                GameState GameState = gamePlayer.GetGameState();
+
+                switch (GameState)
+                {
+                    case GameState.WIN:
+                    case GameState.LOSS:
+                    case GameState.TIE:
+                        return StatusCode(403, "The Game Already Ended");
+                }
 
                 gamePlayer.Salvos.Add(new Salvo {
                     GamePlayerId = id,
@@ -193,6 +206,48 @@ namespace salvo.Controllers
                         Location = location.Location
                     }).ToList()
                 });
+
+                GameState = gamePlayer.GetGameState();
+
+                switch (GameState)
+                {
+                    case GameState.WIN:
+                        Resultado = Resultado.PLAYER_WON;
+                        GameEnded = true;
+                        break;
+                    case GameState.LOSS:
+                        Resultado = Resultado.PLAYER_LOSS;
+                        GameEnded = true;
+                        break;
+                    case GameState.TIE:
+                        Resultado = Resultado.GAME_TIE;
+                        GameEnded = true;
+                        break;
+                }
+
+                if (GameEnded)
+                {
+                    DateTime endDate = DateTime.Now;
+                    Score score = new Score
+                    {
+                        FinishDate = endDate,
+                        Game = gamePlayer.Game,
+                        Player = gamePlayer.Player,
+                        Point = (Resultado == Resultado.PLAYER_WON) ? 1 : (Resultado == Resultado.GAME_TIE) ? 0.5 : 0
+                    };
+
+                    _scoreRepository.Save(score);
+
+                    Score opponentScore = new Score
+                    {
+                        FinishDate = endDate,
+                        Game = opponent.Game,
+                        Player = opponent.Player,
+                        Point = (Resultado == Resultado.PLAYER_WON) ? 0 : (Resultado == Resultado.GAME_TIE) ? 0.5 : 1
+                    };
+
+                    _scoreRepository.Save(score);
+                }
 
                 _repository.Save(gamePlayer);
 

@@ -63,15 +63,35 @@
         },
         showLogin: function (show) {
             if (show) {
-                $("#login-form").show();
-                $("#login-form").trigger("reset");
-                this.name = "";
+                $('#botonLogin').show();
+                $('#botonRegister').show();
                 this.email = "";
                 this.password = "";
+            } else {
+                $('#exampleModal').modal('hide');
+                $('#botonLogin').hide();
+                $('#botonRegister').hide();
+                /*$("#botonLogin").css({
+                    display: "none",
+                    visibility: "hidden"
+                });*/
             }
-            else
-                $("#login-form").hide();
         },
+
+        mostrarFormLogin: function () {
+            $('#signin-btn').hide();
+            $('#login-btn').show();
+            $('#titleForm').text("Login");
+            $('#inputLoginName').hide();
+        },
+
+        mostrarFormRegister: function () {
+            $('#login-btn').hide();
+            $('#signin-btn').show();
+            $('#titleForm').text("Register");
+            $('#inputLoginName').show();
+        },
+
         logout: function () {
             axios.post('/api/auth/logout')
                 .then(result => {
@@ -84,7 +104,7 @@
                     alert("Ocurrió un error al cerrar sesión");
                 });
         },
-        login: function(event){
+        login: function (event) {
             axios.post('/api/auth/login', {
                 email: this.email, password: this.password
             })
@@ -100,8 +120,7 @@
                         this.modal.tittle = "Falló la autenticación";
                         this.modal.message = "Email o contraseña inválido"
                         this.showModal(true);
-                    }
-                    else {
+                    } else {
                         this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
                         this.modal.message = "Ha ocurrido un error";
                         this.showModal(true);
@@ -123,8 +142,7 @@
                         this.modal.tittle = "Falló el registro";
                         this.modal.message = error.response.data
                         this.showModal(true);
-                    }
-                    else {
+                    } else {
                         this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
                         this.modal.message = "Ha ocurrido un error";
                         this.showModal(true);
@@ -151,8 +169,7 @@
                         }
                         score.total += gp.point;
                         scores.push(score);
-                    }
-                    else {
+                    } else {
                         switch (gp.point) {
                             case 1:
                                 scores[index].win++;
@@ -173,8 +190,7 @@
     },
     filters: {
         dateFormat(date) {
-            return moment(date).format('LLL');
+            return moment(date).format('DD-MM-YYYY');
         }
     }
 })
-
