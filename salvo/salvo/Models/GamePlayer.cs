@@ -66,6 +66,8 @@ namespace salvo.Models
                 return GameState.WAIT;
             if (Ships.Count == 0)
                 return GameState.PLACE_SHIPS;
+            if (Opponent.Ships.Count == 0)
+                return GameState.WAIT;
             if (Salvos.Count > Opponent.Salvos.Count)
                 return GameState.WAIT;
             if (Salvos.Count < Opponent.Salvos.Count)

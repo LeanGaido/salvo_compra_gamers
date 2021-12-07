@@ -233,8 +233,8 @@ namespace salvo.Controllers
                     Score score = new Score
                     {
                         FinishDate = endDate,
-                        Game = gamePlayer.Game,
-                        Player = gamePlayer.Player,
+                        GameId = gamePlayer.GameId,
+                        PlayerId = gamePlayer.PlayerId,
                         Point = (Resultado == Resultado.PLAYER_WON) ? 1 : (Resultado == Resultado.GAME_TIE) ? 0.5 : 0
                     };
 
@@ -243,12 +243,12 @@ namespace salvo.Controllers
                     Score opponentScore = new Score
                     {
                         FinishDate = endDate,
-                        Game = opponent.Game,
-                        Player = opponent.Player,
+                        GameId = opponent.GameId,
+                        PlayerId = opponent.PlayerId,
                         Point = (Resultado == Resultado.PLAYER_WON) ? 0 : (Resultado == Resultado.GAME_TIE) ? 0.5 : 1
                     };
 
-                    _scoreRepository.Save(score);
+                    _scoreRepository.Save(opponentScore);
                 }
 
                 return StatusCode(201, "Created");

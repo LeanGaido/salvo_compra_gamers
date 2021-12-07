@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -66,11 +68,15 @@ namespace salvo.Controllers
                 Player newPlayer = _repository.FindByEmail(playerDTO.Email);
                 if (newPlayer == null)
                 {
+                    byte[] data = Encoding.ASCII.GetBytes(playerDTO.Password);
+                    data = new SHA256Managed().ComputeHash(data);
+                    string passwordHash = Encoding.ASCII.GetString(data);
+
                     newPlayer = new Player
                     {
                         Name = playerDTO.Name,
                         Email = playerDTO.Email,
-                        Password = playerDTO.Password
+                        Password = passwordHash
                     };
 
                     _repository.Create(newPlayer);
