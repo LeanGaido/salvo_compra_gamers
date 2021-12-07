@@ -30,7 +30,8 @@ namespace salvo
             services.AddRazorPages();
 
             services.AddDbContext<SalvoContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("SalvoDataBase")));
+               options.UseSqlServer(Configuration.GetConnectionString("SalvoDataBase"),
+               options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IGamePlayerRepository, GamePlayerRepository>();

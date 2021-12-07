@@ -67,10 +67,12 @@
                 $('#botonRegister').show();
                 this.email = "";
                 this.password = "";
+                $('#logout-btn').hide();
             } else {
                 $('#exampleModal').modal('hide');
                 $('#botonLogin').hide();
                 $('#botonRegister').hide();
+                $('#logout-btn').show();
                 /*$("#botonLogin").css({
                     display: "none",
                     visibility: "hidden"

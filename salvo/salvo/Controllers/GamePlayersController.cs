@@ -207,6 +207,8 @@ namespace salvo.Controllers
                     }).ToList()
                 });
 
+                _repository.Save(gamePlayer);
+
                 GameState = gamePlayer.GetGameState();
 
                 switch (GameState)
@@ -248,8 +250,6 @@ namespace salvo.Controllers
 
                     _scoreRepository.Save(score);
                 }
-
-                _repository.Save(gamePlayer);
 
                 return StatusCode(201, "Created");
             }

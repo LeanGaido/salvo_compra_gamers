@@ -55,7 +55,6 @@ namespace salvo.Models
             return Ships?.Where(ship => ship.Locations.Select(shipLocation => shipLocation.Location)
                                                       .All(salvoLocation => salvoLocations != null ? salvoLocations.Any(shipLocation => shipLocation == salvoLocation) : false))
                                                       .Select(ship => ship.Type).ToList();
-
         }
         public GameState GetGameState()
         {
