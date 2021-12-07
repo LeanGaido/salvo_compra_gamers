@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using salvo.Models;
 using salvo.Repositories;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,8 +21,8 @@ namespace salvo.Controllers
         private IPlayerRepository _playerRepository;
         private IGamePlayerRepository _gamePlayerRepository;
 
-        public GamesController(IGameRepository repository, 
-                               IPlayerRepository playerRepository, 
+        public GamesController(IGameRepository repository,
+                               IPlayerRepository playerRepository,
                                IGamePlayerRepository gamePlayerRepository)
         {
             _repository = repository;
@@ -40,16 +41,16 @@ namespace salvo.Controllers
                 //var games = _repository.GetAllGames();
                 //Ahora
                 var gamesDto = _repository.GetAllGamesWithPlayers().Select(
-                    game => new GameDTO 
+                    game => new GameDTO
                     {
                         Id = game.Id,
                         CreationDate = game.CreationDate,
                         GamePlayers = game.GamePlayers.Select(
-                            gamePlayer => new GamePlayerDTO 
+                            gamePlayer => new GamePlayerDTO
                             {
                                 Id = gamePlayer.Id,
                                 JoinDate = gamePlayer.JoinDate,
-                                Player = new PlayerDTO 
+                                Player = new PlayerDTO
                                 {
                                     Id = gamePlayer.Player.Id,
                                     Name = gamePlayer.Player.Name,
@@ -122,9 +123,9 @@ namespace salvo.Controllers
                 #region Validaciones
                 if (Game == null)
                     return StatusCode(403, "Game doesnt exist");
-                if(Game.GamePlayers.Where(x => x.Player.Id == Player.Id).FirstOrDefault() != null)
+                if (Game.GamePlayers.Where(x => x.Player.Id == Player.Id).FirstOrDefault() != null)
                     return StatusCode(403, "The Player is already on the game");
-                if(Game.GamePlayers.Count == 2)
+                if (Game.GamePlayers.Count == 2)
                     return StatusCode(403, "The Game is already full");
                 #endregion
 
@@ -143,6 +144,71 @@ namespace salvo.Controllers
             {
                 return StatusCode(500, "");
             }
+        }
+
+        [HttpGet("topTypes")]
+        [AllowAnonymous]
+        public IActionResult GetTopTypeDestroyed()
+        {
+            try
+            {
+                List<String> Sunks = new List<String>();
+                var games = _repository.GetAllGamesWithPlayersAndSalvos();
+                foreach (var game in games)
+                {
+                    foreach (var gp in game.GamePlayers)
+                    {
+                        Sunks.AddRange(gp.GetSunks());
+                    }
+                }
+                var types = Sunks
+                     .GroupBy(i => i)
+                     .OrderByDescending(g => g.Count());
+
+                IEnumerable sunksTop5 = types.Take(5).Select(type => new
+                {
+                    type = type.First(),
+                    quantity = type.Count()
+                });
+
+
+                return Ok(sunksTop5);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+        }
+
+
+        [HttpGet("topLocations")]
+        [AllowAnonymous]
+        public IActionResult GetTopLocationsDestroyed()
+        {
+            try
+            {
+                IEnumerable<String> salvoLocations = _repository.GetAllSalvoLocations()
+                .SelectMany(game => game.GamePlayers)
+                    .SelectMany(gp => gp.Salvos)
+                        .SelectMany(salvo => salvo.Locations)
+                            .Select(location => location.Location);
+
+                var locations = salvoLocations
+                     .GroupBy(i => i)
+                     .OrderByDescending(g => g.Count());
+
+                IEnumerable mayores = locations.Take(5).Select(location => new
+                {
+                    position = location.First(),
+                    quantity = location.Count()
+                });
+                return Ok(mayores);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+
         }
     }
 }

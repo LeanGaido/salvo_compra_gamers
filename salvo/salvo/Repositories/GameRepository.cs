@@ -30,6 +30,33 @@ namespace salvo.Repositories
                 .ToList();
         }
 
+        public IEnumerable<Game> GetAllGamesWithPlayersAndSalvos()
+        {
+            return FindAll(source => source.Include(game => game.GamePlayers)
+                    .ThenInclude(gp => gp.Player)
+                        .ThenInclude(player => player.Scores)
+                    .Include(game => game.GamePlayers)
+                        .ThenInclude(gp => gp.Salvos)
+                            .ThenInclude(salvo => salvo.Locations)
+                    .Include(game => game.GamePlayers)
+                        .ThenInclude(gp => gp.Ships)
+                            .ThenInclude(ship => ship.Locations)
+                          )
+                            .OrderBy(game => game.CreationDate)
+                            .ToList();
+        }
+
+        public IEnumerable<Game> GetAllSalvoLocations()
+        {
+            return FindAll(source => source
+                          .Include(game => game.GamePlayers)
+                            .ThenInclude(gp => gp.Salvos)
+                                .ThenInclude(salvo => salvo.Locations)
+                           )
+                            .OrderByDescending(game => game.CreationDate)
+                            .ToList();
+        }
+
         public Game FindById(long id)
         {
             return FindByCondition(game => game.Id == id)
