@@ -50,7 +50,7 @@
                 <div class="col">
                     <div>
                         <h2 id="games-list">Juegos</h2>
-                        <button v-if="player != 'Guest'" v-on:click="createGame()" id="create-btn" class="btn btn-success btn-sm ml-1 my-2 my-sm-0" type="button">Crear juego!</button>
+                        <button v-if="player != 'Guest'" v-on:click="createGame()" id="create-btn" class="btn btn-salvo btn-sm ml-1 my-2 my-sm-0" type="button">Crear juego!</button>
                     </div>
                     <ul class="">
                         <li v-for="game in lists">
@@ -61,21 +61,21 @@
                                     <div v-if="game.gamePlayers.length == 2">
                                         <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span><h3 class="gameListTexts">{{ game.gamePlayers[1].player.name }}</h3>
                                         <div v-if="player != 'Guest' && game.gamePlayers[0].player.email == player">
-                                            <button class="btn btn-primary btn-sm" v-on:click="returnGame(game.gamePlayers[0].id)">Ingresar al Juego</button>
+                                            <button class="btn btn-salvo btn-sm" v-on:click="returnGame(game.gamePlayers[0].id)">Ingresar al Juego</button>
                                         </div>
                                         <div v-if="player != 'Guest' && game.gamePlayers[1].player.email == player">
-                                            <button class="btn btn-primary btn-sm" v-on:click="returnGame(game.gamePlayers[1].id)">Ingresar al Juego</button>
+                                            <button class="btn btn-salvo btn-sm" v-on:click="returnGame(game.gamePlayers[1].id)">Ingresar al Juego</button>
                                         </div>
                                     </div>
                                     <div v-else-if="game.gamePlayers[0].player.email != player && player != 'Guest'">
                                         <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span><h3 class="gameListTexts"> Sin Oponente</h3>
                                         <br />
-                                        <button class="btn btn-success btn-sm" v-on:click="joinGame(game.id)">Unirse al juego</button>
+                                        <button class="btn btn-salvo btn-sm" v-on:click="joinGame(game.id)">Unirse al juego</button>
                                     </div>
                                     <div v-else-if="player != 'Guest'">
                                         <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span><h3 class="gameListTexts"> Sin Oponente</h3>
                                         <br />
-                                        <button class="btn btn-primary btn-sm" v-on:click="returnGame(game.gamePlayers[0].id)">Ingresar al Juego</button>
+                                        <button class="btn btn-salvo btn-sm" v-on:click="returnGame(game.gamePlayers[0].id)">Ingresar al Juego</button>
                                     </div>
                                     <div v-else>
                                         <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span><h3 class="gameListTexts"> Sin Oponente</h3>
@@ -149,8 +149,8 @@
                             <input v-model:value="name" class="form-control mr-sm-2 formInput" type="text" placeholder="Name" aria-label="Name" id="inputLoginName">
                             <input v-model:value="email" class="form-control mr-sm-2 formInput" type="email" placeholder="Email" aria-label="Email" id="inputLoginEmail">
                             <input v-model:value="password" class="form-control mr-sm-2 formInput" type="password" placeholder="Contrase&ntilde;a" aria-label="Contraseña" id="inputLoginPassword">
-                            <button v-on:click="login" id="login-btn" class="btn btn-outline-success my-2 my-sm-0" type="button">Login</button>
-                            <button v-on:click="signin" id="signin-btn" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Registro</button>
+                            <button v-on:click="login" id="login-btn" class="btn btn-salvo my-2 my-sm-0" type="button">Login</button>
+                            <button v-on:click="signin" id="signin-btn" class="btn btn-salvo ml-1 mr-1 my-2 my-sm-0" type="button">Registro</button>
                         </form>
                     </div>
 

@@ -160,3 +160,17 @@ table tbody {
 .tablaTurnosDaños{
     max-width:450px;
 }
+
+.btn-salvo {
+    background-color: #0f2393;
+    color: #fff;
+}
+
+    .btn-salvo:hover {
+        color: #fff;
+        background-color: #112ab7;
+    }
+
+.pagination {
+    justify-content: center;
+}
