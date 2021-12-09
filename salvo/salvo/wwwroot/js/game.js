@@ -10,7 +10,9 @@
             tittle: "",
             message: ""
         },
-        player: null
+        player: null,
+        currentPage: 1,
+        perPage: 10
     },
     mounted() {
         this.getGames();
@@ -194,5 +196,21 @@
         dateFormat(date) {
             return moment(date).format('DD-MM-YYYY');
         }
+    },
+    computed: {
+        lists() {
+            const items = this.games;
+            // Return just page of items needed
+            return items.slice(
+                (this.currentPage - 1) * this.perPage,
+                this.currentPage * this.perPage
+            )
+        },
+        totalRows() {
+            return this.games.length
+        }
+    },
+    created() {
+        this.getGames();
     }
 })

@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.11/dist/bootstrap-vue.css" />
     <link rel="stylesheet" href="css/salvo.css" />
     <title>Salvo games!</title>
 </head>
@@ -52,7 +53,7 @@
                         <button v-if="player != 'Guest'" v-on:click="createGame()" id="create-btn" class="btn btn-success btn-sm ml-1 my-2 my-sm-0" type="button">Crear juego!</button>
                     </div>
                     <ul class="">
-                        <li v-for="game in games">
+                        <li v-for="game in lists">
                             <ul>
                                 <!--v-for="gamePlayer in game.gamePlayers" class="col-md-6" style="display:inline-block"-->
                                 <li class="gameListElements text-center">
@@ -84,6 +85,9 @@
                             </ul>
                         </li>
                     </ul>
+                    <b-pagination :total-rows="totalRows"
+                                  v-model="currentPage"
+                                  :per-page="perPage" />
                 </div>
                 <div class="col">
                     <h2>L&iacute;deres</h2>
@@ -162,6 +166,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.11/dist/bootstrap-vue.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/game.js"></script>
 </body>
