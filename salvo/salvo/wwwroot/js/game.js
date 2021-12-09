@@ -81,21 +81,18 @@
                 });*/
             }
         },
-
         mostrarFormLogin: function () {
             $('#signin-btn').hide();
             $('#login-btn').show();
             $('#titleForm').text("Login");
             $('#inputLoginName').hide();
         },
-
         mostrarFormRegister: function () {
             $('#login-btn').hide();
             $('#signin-btn').show();
             $('#titleForm').text("Register");
             $('#inputLoginName').show();
         },
-
         logout: function () {
             axios.post('/api/auth/logout')
                 .then(result => {
