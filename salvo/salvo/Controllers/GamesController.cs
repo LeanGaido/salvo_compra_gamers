@@ -53,7 +53,7 @@ namespace salvo.Controllers
                                 Player = new PlayerDTO
                                 {
                                     Id = gamePlayer.Player.Id,
-                                    Name = gamePlayer.Player.Name,
+                                    Name = (gamePlayer.Player.Name.Length > 7)?gamePlayer.Player.Name.Substring(0,7) + "...": gamePlayer.Player.Name,
                                     Email = gamePlayer.Player.Email
                                 },
                                 Point = gamePlayer.GetScore() != null ? gamePlayer.GetScore().Point : null
