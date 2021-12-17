@@ -210,5 +210,63 @@ namespace salvo.Controllers
             }
 
         }
+
+        [HttpGet("infoPlayer")]
+        public IActionResult InfoPlayer()
+        {
+            try
+            {
+                string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
+                Player player = _playerRepository.FindByEmail(email);
+
+                GameListDTO gameList = new GameListDTO
+                {
+                    Email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest",
+                    Games = _repository.GetAllGamesWithPlayers()
+                    .Select(game => new GameDTO
+                    {
+                        Id = game.Id,
+                        CreationDate = game.CreationDate,
+                        GamePlayers = game.GamePlayers.Select(gp => new GamePlayerDTO
+                        {
+                            Id = gp.Id,
+                            JoinDate = gp.JoinDate,
+                            Player = new PlayerDTO
+                            {
+                                Id = gp.Player.Id,
+                                Name = (gp.Player.Name.Length > 10) ? gp.Player.Name.Substring(0, 10) + "..." : gp.Player.Name,
+                                Email = gp.Player.Email
+                            },
+                            Point = gp.GetScore() != null ? (double?)gp.GetScore().Point : null
+                        }).ToList()
+                    }).ToList()
+                };
+
+                //int wins = 0; 
+
+                var newGameList = gameList.Games.Where(game => game.GamePlayers.Where(x => x.Player.Id == player.Id).FirstOrDefault() != null).ToList();
+
+                var gamesWins = newGameList.Where(game => game.GamePlayers.First().Point == 1).ToList().Count;
+
+                var gamesLoss = newGameList.Where(game => game.GamePlayers.First().Point == 0).ToList().Count;
+
+                var gamesTies = newGameList.Where(game => game.GamePlayers.First().Point == 0.5).ToList().Count;
+
+                var gamesNotFinished = newGameList.Where(game => game.GamePlayers.First().Point == null).ToList().Count;
+
+                /*ResultsDTO resultados = new ResultsDTO
+                {
+                    TotalGamesPlayed = gameList.Games.Count(),
+
+                }*/
+
+                return StatusCode(201, gamesWins);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
